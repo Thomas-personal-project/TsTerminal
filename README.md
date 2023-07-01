@@ -7,7 +7,7 @@ To install, simply run the install.py script to add the correct modules to PATH,
  - TOML
 
 ## USAGE
-Simply run the main.py file, and the terminal will start!
+Simply run the main.py file, and the terminal will start! Please note that it must be run in the directory containing the config.toml file for it to work, otherwise it cannot work. If you have the ability to fix this issue, please feel free to contact me and i'll accept any push requests or minor changes! (I'm incredibly new to programming)
 
 ## Modules and module loading
 The terminal is extensible, so you can add commands via either the Commands folder or the 'load' command

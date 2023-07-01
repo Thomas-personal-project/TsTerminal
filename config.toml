@@ -1,0 +1,68 @@
+# NOTE: To change the location of the config file,
+# set [Meta]CfgStorage to EXTERNAL and [Meta]CfgLocation
+# to another file
+[Meta]
+    CfgStorage = "LOCAL"
+    CfgLocation = "."
+    CfgLocalFile = ".\\config.toml"
+
+[Prompt]
+    seperator = " "
+    use_admin_symbol = true
+    admin_symbol = "(Admin)"
+    admin_symbol_color = "yellow"
+    admin_symbol_modifiers = ["bold"]
+    name = "TsTerminal"
+    name_color = "red"
+    name_modifiers = ["none"]
+    version = "V2.0.0"
+    version_color = "green"
+    version_modifiers = ["bold"]
+    pointer = "->"
+    pointer_color = "cyan"
+    pointer_modifiers = ["none"]
+    end = "$ "
+    end_color = "yellow"
+    end_modifiers = ["none"]
+    # short: FOLDER\\SUBFOLDER
+    # long: DRIVE\\CONTAINER\\FOLDER\\SUBFOLDER
+    # mini: SUBFOLDER
+    filepath_format = "short"
+    filepath_color = "white"
+    filepath_modifiers = ["none"]
+
+[StdProcessorSymbols]
+    # Any of these symbols between <X> will be treated as
+    # A global value and substituted in inside of 
+    # StdProcessor or in the Config() init
+    # NOTE: Keep them lowercase
+    home = "<HOME>"
+
+[InvalidCommand]
+    invalid_command_message = "The command was invalid: <name> (<args>)"
+    invalid_command_message_color = "red"
+    invalid_command_message_modifiers = ["bold"]
+    os_exec_invalid_commands = true
+
+[Startup]
+    debug_mode = false
+    clear_screen_on_startup = true
+    do_init_code_inject = false
+    init_code = ""
+    # Defaults to HOME if the directory is not valid
+    startup_directory = "<HOME>\\"
+
+[Ls]
+    table_color = "cyan"
+    exclude = [".vscode", "__pycache__", ".idea"]
+
+[Cd]
+    do_path_confirmation = true
+
+[PolicyView]
+    allow_policy_view = true
+
+[Getcmd]
+    table_color = "cyan"
+
+

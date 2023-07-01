@@ -44,7 +44,8 @@ class Config:
         for dictionary in self.data:
             if search_key in dictionary:
                 return dictionary[search_key]
-        return None
+        
+        raise IndexError('Bad seek')
 
     @config_check
     def parse(self, cfg_path: str = DEFAULT_CONFIG_PATH):

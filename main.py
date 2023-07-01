@@ -16,7 +16,9 @@ def invalid_command(name, args):
     config = TPC.Config()
 
     if bool(config.seek('InvalidCommand')['os_exec_invalid_commands']):
+        print()
         os.system(name + " " + " ".join(args))
+        print()
         return
 
     pbuilder = TPC.PromptBuilder()
@@ -166,7 +168,7 @@ def main():
         )
 
         print(TPC.format_text(
-            table,
+            table, # type: ignore
             color,
             TPC.TextFormat.BOLD
         ))
@@ -209,8 +211,9 @@ def main():
             break
         
         # Refreshes the prompt
+        # NOTE: manager.reader.prompt IS valid, silly pylint
         prompt_builder = create_prompt()
-        manager.reader.prompt = prompt_builder.fetch(
+        manager.reader.prompt = prompt_builder.fetch( # type: ignore
             TPC.Config().seek('Prompt')['seperator']
         )
 

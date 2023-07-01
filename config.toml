@@ -6,6 +6,10 @@
     CfgLocation = "."
     CfgLocalFile = ".\\config.toml"
 
+# COLOR OPTIONS
+# white, yellow, red, green, magenta, cyan, black
+# MODIFIER OPTIONS
+# none, bold, underline, blink, reverse
 [Prompt]
     seperator = " "
     use_admin_symbol = true
@@ -65,4 +69,6 @@
 [Getcmd]
     table_color = "cyan"
 
-
+[DeleteItem]
+    do_recycle = true
+    do_warning = true

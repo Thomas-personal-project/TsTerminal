@@ -83,14 +83,14 @@ class Config:
         
         return self.data
 
-class DictExpantion:
-    def __init__(self, dicts: dict[dict]):
-        self.flattened: dict = {}
-        self.flatten(dicts)
-
-    def flatten(self, dicts: dict):
-        for key, value in dicts.items():
-            if isinstance(value, dict):
-                self.flatten(value)
-            else:
-                self.flattened[key] = value
+#class DictExpantion:
+#    def __init__(self, dicts: dict[dict]):
+#        self.flattened: dict = {}
+#        self.flatten(dicts)
+#
+#    def flatten(self, dicts: dict):
+#        for key, value in dicts.items():
+#            if isinstance(value, dict):
+#                self.flatten(value)
+#            else:
+#                self.flattened[key] = value

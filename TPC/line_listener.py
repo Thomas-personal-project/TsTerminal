@@ -42,6 +42,12 @@ class Reader(ABC):
     @abstractmethod
     def readline(self) -> str: pass
 
+class SignalReloadError(Exception):
+    """
+    Signals for a reload
+    """
+    pass
+
 class StdReader(Reader):
     def __init__(self, prompt: str):
         self.prompt = prompt
@@ -117,11 +123,11 @@ class CommandNotFoundError(Exception):
 
 class CommandManager:
     """
-    An observer that will take a Reader, and some subscribers
+    A singleton observer that will take a Reader, and some subscribers
     to certain commands (see register_command) and then will
     trigger functions when the command is run
     """
-    
+
     def __init__(
             self, 
             reader: Reader, 
@@ -168,6 +174,9 @@ class CommandManager:
                     try:
                         cmd["func"](*args)
                     except Exception as E:
+                        if isinstance(E, SignalReloadError):
+                            raise SignalReloadError
+                        
                         print(format_text(
                             f"The command {name} raised an error: {E}\n",
                             TextFormat.FG_RED
@@ -183,6 +192,9 @@ class CommandManager:
                         try:
                             cmd["func"](*args)
                         except Exception as E:
+                            if isinstance(E, SignalReloadError):
+                                raise SignalReloadError
+                            
                             print(format_text(
                                 f"The command {name} raised an error: {E}",
                                 TextFormat.FG_RED

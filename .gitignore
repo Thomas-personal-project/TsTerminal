@@ -1,0 +1,13 @@
+# Ignore compiled Python files
+*.pyc
+
+# Ignore virtual environment directories
+venv/
+env/
+
+# Ignore editor-specific files
+.vscode/
+.idea/
+
+# Ignore handover.ps1
+handover.ps1

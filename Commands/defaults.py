@@ -4,9 +4,14 @@ import prettytable
 import os
 import datetime
 import importlib
+import shutil
+import ctypes
 
 PATH_HISTORY = []
 EXTERNAL_COMMANDS = []
+
+# All of the files that are not modules as part of TsTerminal
+# NOTE: this is a safeguard, as they shouldn't import anyway
 FBLACKLIST = [
     "main.py",
     "_commands.py",
@@ -370,19 +375,96 @@ def tsLoadCommand(manager: CommandManager, command_file: str):
 )
 @newline_output
 @with_manager_handle
-def tsUnloadCommand(manager: CommandManager, command_name: str):
-    if manager.is_command(command_name):
-        manager.deregister_command(command_name)
-        if command_name in EXTERNAL_COMMANDS:
-            EXTERNAL_COMMANDS.remove(command_name)
-    else:
-        print(
-            format_text(
-                "The command specifed is not loaded. NOTE: Provide the command and not an alias.",
+def tsUnloadCommand(manager: CommandManager, *commands: str):
+    for command_name in commands:
+        if manager.is_command(command_name):
+            manager.deregister_command(command_name)
+            if command_name in EXTERNAL_COMMANDS:
+                EXTERNAL_COMMANDS.remove(command_name)
+        else:
+            print(
+                format_text(
+                    "The command specifed is not loaded. NOTE: Provide the command and not an alias.",
+                    TextFormat.FG_RED,
+                    TextFormat.BOLD
+                )
+            )
+
+@command(
+    name = "delete",
+    aliases = [
+        "del",
+        "rm"
+    ]
+)
+def remove_item(item: str):
+    if not os.path.isfile(item):
+        if os.path.isdir(item):
+            print(format_text(
+                f"\nThe path {item} points to a folder. Use rmdirm or remove-directory to delete a directory\n",
                 TextFormat.FG_RED,
                 TextFormat.BOLD
-            )
+            ))
+        else:
+            print(format_text(
+                f"\nThe path {item} does not exist\n",
+                TextFormat.FG_RED,
+                TextFormat.BOLD
+            ))
+    
+    rm_options = Config().seek('Rm')
+    if rm_options['do_recycle']:
+        # Move the file to the recycle bin
+        recycle_file(item)
+    else:
+        # Just delete it
+        if rm_options['do_warning']:
+            input(format_text(
+                f"WARNING: You are about to delete {item}. Are you sure? (Y|N)\n>",
+                TextFormat.FG_RED,
+                TextFormat.BOLD
+            ))
+            os.remove(item)
+        else:
+            os.remove(item)
+
+@exclude
+@newline_output
+def recycle_file(file_path):
+    # Check if the file exists
+    if not os.path.exists(file_path):
+        print(f"File '{file_path}' does not exist.")
+
+    try:
+        # Move the file to the recycle bin
+        shell32 = ctypes.windll.shell32
+        result = shell32.SHFileOperationW(
+            None,
+            2,  # FO_DELETE
+            file_path,
+            None,
+            0x10,  # FOF_ALLOWUNDO
+            0
         )
+        
+
+        if result != 0:
+            print(format_text(
+                f"Failed to recycle file: Error code {result}",
+                TextFormat.FG_RED,
+                TextFormat.BOLD
+            ))
+        else:
+            print(format_text(
+                f"Sucessfully recycled {file_path}",
+                TextFormat.FG_GREEN
+            ))
+    except Exception as e:
+        print(format_text(
+            f"Failed to recycle file: {e}",
+            TextFormat.FG_RED,
+            TextFormat.BOLD
+        ))
 
 @command(
     name = "policyview",
